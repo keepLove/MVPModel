@@ -1,0 +1,89 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def buildV = rootProject.ext.buildV
+def lib = rootProject.ext.lib
+
+android {
+
+    compileSdkVersion buildV.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.s.mvpmodel"
+        minSdkVersion buildV.minSdkVersion
+        targetSdkVersion buildV.targetSdkVersion
+        versionCode buildV.versionCode
+        versionName buildV.versionName
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            zipAlignEnabled true
+//            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            shrinkResources false
+            minifyEnabled false
+            zipAlignEnabled true
+//            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                def date = new Date().format("yyyy-MM-dd_HH-mm-ss", TimeZone.getTimeZone("GMT+08"))
+                outputFileName = "${date}-app-${variant.name}-v${variant.versionName}.apk"
+            }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // support
+    implementation lib.appcompat
+    implementation lib.design
+    implementation lib.recyclerview
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    // data
+    implementation lib.retrofit
+    implementation lib.retrofit_converter_gson
+    implementation lib.retrofit_adapters
+    implementation lib.okhttplog
+    // util
+    implementation lib.logger
+    implementation lib.multidex
+    implementation lib.base_adapter
+    implementation lib.rxjava
+    implementation lib.rxandroid
+    implementation lib.rxpermissions
+    implementation lib.glide
+    kapt lib.glide_compiler
+    implementation lib.glide_transformations
+    // lifecycle
+    implementation lib.rxlifecycle
+    implementation lib.rxlifecycle_android
+    implementation lib.rxlifecycle_android_lifecycle
+    implementation lib.rxlifecycle_components
+    implementation lib.rxlifecycle_kotlin
+    implementation lib.rxlifecycle_kotlin_lifecycle
+    // test
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
