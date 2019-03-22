@@ -6,4 +6,6 @@ package com.s.mvpmodel.data.net
 object NetConfig {
 
     const val BASE_URL = ""
+
+    const val TEST_URL = ""
 }

@@ -44,9 +44,10 @@ fun <T : BaseResponse> Observable<T>.composeToThreadSchedulerResponseTransform()
 /**
  * 对异常统一处理
  */
-fun <T : Any> Observable<T>.subscribeResponseObserver(onNext: (t: T) -> Unit = {}, onError: (message: String?) -> Unit = {},
+fun <T : Any> Observable<T>.subscribeResponseObserver(onError: (message: String?) -> Unit = {},
                                                       onSubscribe: (d: Disposable?) -> Unit = {}, onComplete: () -> Unit = {},
-                                                      showError: (e: Throwable) -> Boolean = { false }) {
+                                                      showError: (e: Throwable) -> Boolean = { false },
+                                                      onNext: (t: T) -> Unit = {}) {
     subscribe(object : ResponseObserver<T>() {
         override fun onNext(t: T) {
             onNext.invoke(t)
